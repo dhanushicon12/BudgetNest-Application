@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Font -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* Background with overlay */
+body {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url("{% static 'images/add_member1.jpg' %}");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Glass Card */
+.form-card {
+    max-width: 420px;
+    margin: 80px auto;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    color: white;
+}
+
+/* Heading */
+.form-card h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Inputs */
+.form-control {
+    border-radius: 12px;
+    border: none;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+/* Focus */
+.form-control:focus {
+    box-shadow: 0 0 10px rgba(99,102,241,0.5);
+}
+
+/* Button */
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 25px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+
+/* Messages */
+.message-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.custom-alert {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: rgba(34,197,94,0.9);
+    color: white;
+    margin-bottom: 10px;
+}
+
+/* Error */
+.error-text {
+    text-align: center;
+    color: #f87171;
+    margin-bottom: 10px;
+}
+</style>
+
+<div class="form-card">
+
+```
+<h1>👨‍👩‍👧 Add Member</h1>
+
+<!-- Messages -->
+<div class="message-container">
+    {% for message in messages %}
+        <div class="custom-alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+
+{% if null %}
+    <p class="error-text">Please enter income</p>
+{% endif %}
+
+<form action="{% url 'addingmember' %}" method="post">
+    {% csrf_token %}
+
+    <input class="form-control" type="text" placeholder="First Name" name="firstname" required>
+
+    <input class="form-control" type="number" placeholder="Age" name="age" required>
+
+    <input class="form-control" type="number" placeholder="Income (₹)" name="income" required>
+
+    <input type="submit" value="Add Member" class="btn btn-primary btn-block">
+</form>
+```
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Fonts + Icons -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* Background */
+body {
+    background-color:lightblue;
+    font-family: 'Poppins', sans-serif;
+}
+/* Container */
+.container {
+    max-width: 1100px;
+}
+
+/* Heading */
+h2 {
+    color: black;
+    font-weight: 600;
+}
+
+/* Alert */
+.custom-alert {
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* Table Card */
+.family-table {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Table */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.table thead th {
+    border: none;
+    color: black;
+    font-weight: 500;
+}
+
+/* Rows */
+.table tbody tr {
+    background: #f9fafb;
+    transition: 0.3s;
+}
+
+.table tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Cells */
+.table td {
+    border: none;
+    padding: 14px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 50px;
+    font-size: 13px;
+    padding: 6px 14px;
+}
+
+/* Update */
+.btn-warning {
+    background: linear-gradient(135deg, #facc15, #fde047);
+    border: none;
+}
+
+/* Delete */
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    color: white;
+}
+
+/* No Members Card */
+.no-members {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.no-members p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.no-members .btn-primary {
+    border-radius: 25px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #36d1dc, #5b86e5);
+    border: none;
+}
+</style>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">👨‍👩‍👧 Your Family Members</h2>
+
+```
+{% for message in messages %}
+<div class="alert alert-success custom-alert text-center">
+    {{ message }}
+</div>
+{% endfor %}
+
+{% if data %}
+<div class="table-responsive family-table">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-center">First Name</th>
+                <th class="text-center">Age</th>
+                <th class="text-center">Income</th>
+                <th class="text-center">Update</th>
+                <th class="text-center">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in data %}
+            <tr>
+                <td class="text-center">{{ member.firstname }}</td>
+                <td class="text-center">{{ member.age }}</td>
+                <td class="text-center">₹{{ member.income }}</td>
+
+                <td class="text-center">
+                    <a href="{% url 'updatefamily' member.id %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+
+                <td class="text-center">
+                    <a href="{% url 'deletefamily' member.id %}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Are you sure you want to delete?')">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="no-members">
+    <p>No family members added yet.</p>
+    <a href="{% url 'addfamily' %}" class="btn btn-primary">Add Family Member</a>
+</div>
+{% endif %}
+```
+
+</div>
+
+{% endblock %}

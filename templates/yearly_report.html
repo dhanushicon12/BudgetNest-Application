@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Fonts + Chart -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --dark-bg: #0f172a;
+    --dark-card: #1e293b;
+}
+
+/* Global */
+body {
+    background-color:lightblue;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* Container */
+.toppart {
+    margin-top: 50px;
+}
+
+/* Filter Card */
+.form-inline {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Button */
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 20px;
+    padding: 6px 20px;
+}
+
+/* Summary Card */
+.summary-box {
+    margin-top: 25px;
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    color: white;
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* Chart Card */
+.chart-box {
+    margin-top: 25px;
+    background: var(--card);
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Table Card */
+.bottomtab {
+    margin-top: 30px;
+    background: var(--card);
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Table */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.table tbody tr {
+    background: #f9fafb;
+    transition: 0.3s;
+}
+
+.table tbody tr:hover {
+    transform: translateY(-3px);
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: #e2e8f0;
+}
+
+body.dark-mode .form-inline,
+body.dark-mode .bottomtab,
+body.dark-mode .chart-box {
+    background: var(--dark-card);
+}
+</style>
+
+<div class="container toppart">
+
+```
+<!-- Filter -->
+<form class="form-inline" action="{% url 'yearlyreport' %}" method="post">
+    {% csrf_token %}
+    <label>Year</label>
+    <select name="year">
+        {% for year in years %}
+        <option value="{{ year }}" {% if year == start_year %}selected{% endif %}>
+            {{ year }}
+        </option>
+        {% endfor %}
+    </select>
+    <input type="submit" class="btn btn-primary" value="Filter">
+</form>
+
+<!-- Total -->
+<div class="summary-box">
+    Total Yearly Expense: ₹{{ total_year_expense }}
+</div>
+
+<!-- Chart -->
+<div class="chart-box">
+    <canvas id="expenseChart"></canvas>
+</div>
+
+<!-- Table -->
+<div class="bottomtab">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Purpose</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in records %}
+            <tr>
+                <td>{{ i.name.firstname }}</td>
+                <td>{{ i.purpose }}</td>
+                <td>₹{{ i.expense }}</td>
+                <td>{{ i.date|date:"d-M-Y" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>{{ norecords }}</h3>
+</div>
+```
+
+</div>
+
+<!-- Chart Script -->
+
+<script>
+const ctx = document.getElementById('expenseChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ chart_labels|safe }},   // ["Jan","Feb",...]
+        datasets: [{
+            label: 'Monthly Expenses',
+            data: {{ chart_data|safe }},   // [1000,2000,...]
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+    }
+});
+</script>
+
+{% endblock %}

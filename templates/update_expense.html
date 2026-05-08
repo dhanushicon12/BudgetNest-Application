@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Font -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* Background with overlay */
+body {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url("{% static 'images/add_member1.jpg' %}");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Glass Card */
+.form-card {
+    max-width: 420px;
+    margin: 80px auto;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    color: white;
+}
+
+/* Heading */
+.form-card h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Inputs */
+.form-control {
+    border-radius: 12px;
+    border: none;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+/* Focus */
+.form-control:focus {
+    box-shadow: 0 0 10px rgba(99,102,241,0.5);
+}
+
+/* Button */
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 25px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+</style>
+
+<div class="form-card">
+
+```
+<h1>✏️ Update Expense</h1>
+
+<form action="{% url 'updateexpense' data.id %}" method="post">
+    {% csrf_token %}
+
+    <input class="form-control" type="text"
+           placeholder="Purpose"
+           name="purpose"
+           value="{{ data.purpose }}" required>
+
+    <input class="form-control" type="number"
+           placeholder="Amount (₹)"
+           name="expense"
+           value="{{ data.expense }}" required>
+
+    <input class="form-control" type="date"
+           name="date"
+           value="{{ data.date|date:'Y-m-d' }}" required>
+
+    <input type="submit"
+           value="Update Expense"
+           class="btn btn-primary btn-block">
+</form>
+```
+
+</div>
+
+{% endblock %}

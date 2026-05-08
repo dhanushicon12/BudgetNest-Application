@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Font -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* Background */
+body {
+    background-color:lightblue;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Main Card */
+.expense-card {
+    max-width: 600px;
+    margin: 80px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* Heading */
+.expense-card h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Form */
+.form-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+select {
+    border-radius: 10px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+}
+
+/* Button */
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 25px;
+    padding: 6px 20px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+
+/* Result Cards */
+.result-box {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    font-weight: 500;
+}
+
+/* Monthly */
+.month-box {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    margin-bottom: 15px;
+}
+
+/* Yearly */
+.year-box {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+</style>
+
+<div class="expense-card">
+
+```
+<h1>📊 Monthly Expense Summary</h1>
+
+<form action="{% url 'totalexpense' %}" method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label>Year</label>
+        <select name="year">
+            {% for year in years %}
+            <option value="{{ year }}" {% if year == start_year %}selected{% endif %}>
+                {{ year }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label>Month</label>
+        <select name="month">
+            {% for month in months %}
+            <option value="{{ forloop.counter }}" {% if forloop.counter == start_month %}selected{% endif %}>
+                {{ month }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <input type="submit" class="btn btn-primary" value="Filter">
+    </div>
+
+    <!-- Results -->
+    <div class="result-box month-box">
+        Total expense this month: ₹{{ total_expense }}
+    </div>
+
+    <div class="result-box year-box">
+        Total expense this year: ₹{{ year_total }}
+    </div>
+
+</form>
+```
+
+</div>
+
+{% endblock %}

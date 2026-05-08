@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Fonts & Icons -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+    --bg-light: #f4f7fb;
+    --bg-dark: #0f172a;
+    --card-light: #ffffff;
+    --card-dark: #1e293b;
+    --text-light: #1f2937;
+    --text-dark: #e2e8f0;
+}
+
+/* Global */
+body {
+    background-color:lightblue;
+    font-family: 'Poppins', sans-serif;
+    transition: 0.3s;
+}
+body.dark-mode {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+/* Toggle */
+.toggle-mode {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* Total Expense */
+.total-expense-box {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border-radius: 18px;
+    padding: 25px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.total-expense-box .amount {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+/* Table Card */
+.expense-table {
+    background: var(--card-light);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+body.dark-mode .expense-table {
+    background: var(--card-dark);
+}
+
+/* Table */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.table thead th {
+    border: none;
+    color:black;
+}
+
+/* Rows */
+.table tbody tr {
+    background: #f9fafb;
+    transition: 0.3s;
+}
+
+body.dark-mode .table tbody tr {
+    background: #334155;
+}
+
+.table tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Cells */
+.table td {
+    border: none;
+    padding: 14px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 50px;
+    font-size: 13px;
+    padding: 6px 14px;
+}
+
+.btn-warning {
+    background: #facc15;
+    border: none;
+}
+
+.btn-danger {
+    background: #ef4444;
+    border: none;
+    color: white;
+}
+
+/* No Expense */
+.no-expenses {
+    text-align: center;
+    padding: 40px;
+    background: var(--card-light);
+    border-radius: 18px;
+}
+
+body.dark-mode .no-expenses {
+    background: var(--card-dark);
+}
+</style>
+
+<!-- Dark Mode Toggle -->
+
+<div class="toggle-mode" onclick="toggleMode()">
+    <i class="fas fa-moon"></i>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">View Expenses</h2>
+
+```
+{% for message in messages %}
+<div class="alert alert-success text-center">
+    {{ message }}
+</div>
+{% endfor %}
+
+{% if expenses %}
+<div class="total-expense-box">
+    <h3>Total Expenses</h3>
+    <div class="amount">₹{{ total_expense }}</div>
+</div>
+
+<div class="table-responsive expense-table">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-center">Family Member</th>
+                <th class="text-center">Purpose</th>
+                <th class="text-center">Amount</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">Edit</th>
+                <th class="text-center">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td class="text-center">{{ expense.name.firstname }}</td>
+                <td class="text-center">{{ expense.purpose }}</td>
+                <td class="text-center">₹{{ expense.expense }}</td>
+                <td class="text-center">{{ expense.date|date:"d-M-Y" }}</td>
+
+                <td class="text-center">
+                    <a href="{% url 'updateexpense' expense.id %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </td>
+
+                <td class="text-center">
+                    <a href="{% url 'deleteexpense' expense.id %}" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="no-expenses">
+    <p>No expenses recorded yet.</p>
+    <a href="{% url 'addexpense' %}" class="btn btn-primary">Add Expense</a>
+</div>
+{% endif %}
+```
+
+</div>
+
+<script>
+function toggleMode() {
+    document.body.classList.toggle("dark-mode");
+}
+</script>
+
+{% endblock %}

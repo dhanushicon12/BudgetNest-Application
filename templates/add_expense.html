@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Font -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* Background with overlay */
+body {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url("{% static 'images/coins.jpg' %}");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Glass Card */
+.container {
+    max-width: 450px;
+    margin-top: 80px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    color: white;
+}
+
+/* Heading */
+h2 {
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+.form-control,
+.custom-select {
+    border-radius: 12px;
+    border: none;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+/* Placeholder */
+.form-control::placeholder {
+    color: #666;
+}
+
+/* Button */
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 25px;
+    padding: 10px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+
+/* Dropdown spacing */
+.paddown {
+    margin-bottom: 15px;
+}
+
+/* Focus effect */
+.form-control:focus,
+.custom-select:focus {
+    box-shadow: 0 0 10px rgba(99,102,241,0.5);
+}
+</style>
+
+<div class="container">
+    <h2 class="text-center">💸 Add Expense</h2>
+
+```
+<form action="{% url 'addexpense' %}" method="post">
+    {% csrf_token %}
+
+    <select class="custom-select paddown" name="name">
+        {% for i in data %}
+        <option value="{{i.firstname }}">{{ i.firstname }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="text" class="form-control" placeholder="Purpose" name="purpose" required>
+
+    <input type="number" class="form-control" placeholder="Amount (₹)" name="expense" required>
+
+    <input type="date" class="form-control" name="date"
+           value="{{Expenses.date|date:'Y-m-d'}}" required>
+
+    <input type="submit" class="btn btn-primary btn-block" value="Add Expense">
+</form>
+```
+
+</div>
+
+{% endblock %}
